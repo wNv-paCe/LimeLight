@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "LimeLight",
-    "scheme": "LimeLight",
-    "slug": "LimeLight",
+    "name": "Observatory",
+    "scheme": "observatory",
+    "slug": "observatory",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
