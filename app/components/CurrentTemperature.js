@@ -6,8 +6,8 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
-import { getCurrentLocation, getCityFromCoords } from "../api/location";
-import { getCurrentWeather } from "../api/weather";
+import { getCurrentLocation, getCityFromCoords } from "../../api/location";
+import { getCurrentWeather } from "../../api/weather";
 
 export default function TemperatureDisplay() {
   const [city, setCity] = useState(null);
@@ -48,6 +48,16 @@ export default function TemperatureDisplay() {
       <SafeAreaView className="flex-1 items-center justify-center bg-blue-500">
         <ActivityIndicator size="large" color="#ffffff" />
       </SafeAreaView>
+    );
+  }
+
+  if (!weatherData || !city) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <Text className="text-lg text-red-500">
+          Failed to load weather data.
+        </Text>
+      </View>
     );
   }
 

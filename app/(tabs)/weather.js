@@ -13,7 +13,7 @@ import WeatherDetail from "../components/WeatherDetail";
 const NAVBAR_HEIGHT = 120;
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 const WEATHER_CONTAINER_HEIGHT = SCREEN_HEIGHT * 0.72;
-const SCROLLVIEW_HEIGHT = WEATHER_CONTAINER_HEIGHT - NAVBAR_HEIGHT;
+const SCROLLVIEW_HEIGHT = WEATHER_CONTAINER_HEIGHT - NAVBAR_HEIGHT - 20;
 
 export default function Weather() {
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -36,9 +36,9 @@ export default function Weather() {
           className="absolute left-0 right-0 bottom-0 bg-orange-500/65 rounded-t-3xl overflow-hidden"
           style={{ height: WEATHER_CONTAINER_HEIGHT }}
         >
-          <View style={{ height: SCROLLVIEW_HEIGHT }}>
+          <View style={{ height: SCROLLVIEW_HEIGHT, marginTop: 20 }}>
             <ScrollView
-              className="flex-1 px-8"
+              className="flex px-3"
               contentContainerStyle={{
                 paddingTop: 20,
                 paddingBottom: 20,
@@ -50,8 +50,6 @@ export default function Weather() {
               )}
             >
               <WeatherDetail />
-              {/* 添加一些额外的内容以确保有足够的滚动空间 */}
-              <View style={{ height: SCREEN_HEIGHT * 0.1 }} />
             </ScrollView>
           </View>
         </View>
