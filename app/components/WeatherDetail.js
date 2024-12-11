@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, ActivityIndicator } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getCurrentLocation, getCityFromCoords } from "../../api/location";
 import {
   getCurrentWeather,
@@ -14,36 +15,53 @@ import Hourly from "./Hourly";
 import DailyForecast from "./DailyForecast";
 import WeeklyForecast from "./WeeklyForecast";
 
-export default function WeatherDetail() {
-  const [city, setCity] = useState(null);
-  const [weatherData, setWeatherData] = React.useState(null);
-  const [additionalData, setAdditionalData] = React.useState(null);
-  const [hourlyData, setHourlyData] = React.useState(null);
-  const [weeklyData, setWeeklyData] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
+export default function WeatherDetail({ cityName }) {
+  const [city, setCity] = useState(cityName || null);
+  const [weatherData, setWeatherData] = useState(null);
+  const [additionalData, setAdditionalData] = useState(null);
+  const [hourlyData, setHourlyData] = useState(null);
+  const [weeklyData, setWeeklyData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchWeatherByLocation() {
+    async function fetchWeatherData() {
       try {
-        const location = await getCurrentLocation();
-        console.log("Location:", location);
+        setLoading(true);
 
-        const cityName = await getCityFromCoords(
-          location.latitude,
-          location.longitude
-        );
-        setCity(cityName);
+        let currentCity = cityName;
+        let location = null;
 
-        // Fetch weather data
-        const currentWeather = await getCurrentWeather(cityName);
-        // Fetch additional data (air quality, UV index)
+        // 如果没有传递 cityName，则尝试获取地理位置
+        if (!cityName) {
+          try {
+            location = await getCurrentLocation();
+            currentCity = await getCityFromCoords(
+              location.latitude,
+              location.longitude
+            );
+          } catch (locationError) {
+            console.warn("Location unavailable:", locationError);
+
+            // 如果地理位置不可用，尝试获取默认城市
+            const defaultCity = await AsyncStorage.getItem("defaultCity");
+            currentCity = defaultCity || "Default City"; // 默认城市
+          }
+
+          setCity(currentCity);
+        }
+
+        // 获取天气数据
+        const currentWeather = await getCurrentWeather(currentCity);
         const airQuality = await getAirQuality(
-          location.latitude,
-          location.longitude
+          location ? location.latitude : currentWeather.coord.lat,
+          location ? location.longitude : currentWeather.coord.lon
         );
-        const uvIndex = await getUVIndex(location.latitude, location.longitude);
-        const hourly = await getHourlyWeather(cityName);
-        const weekly = await getWeeklyWeather(cityName);
+        const uvIndex = await getUVIndex(
+          location ? location.latitude : currentWeather.coord.lat,
+          location ? location.longitude : currentWeather.coord.lon
+        );
+        const hourly = await getHourlyWeather(currentCity);
+        const weekly = await getWeeklyWeather(currentCity);
 
         setHourlyData(hourly);
         setWeeklyData(weekly);
@@ -87,8 +105,9 @@ export default function WeatherDetail() {
         setLoading(false);
       }
     }
-    fetchWeatherByLocation();
-  }, []);
+
+    fetchWeatherData();
+  }, [cityName]);
 
   // Helper function to calculate dew point
   const calculateDewPoint = (temperature, humidity) => {

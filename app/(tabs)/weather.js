@@ -12,7 +12,7 @@ import WeatherDetail from "../components/WeatherDetail";
 
 const NAVBAR_HEIGHT = 120;
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
-const WEATHER_CONTAINER_HEIGHT = SCREEN_HEIGHT * 0.72;
+const WEATHER_CONTAINER_HEIGHT = SCREEN_HEIGHT * 0.65;
 const SCROLLVIEW_HEIGHT = WEATHER_CONTAINER_HEIGHT - NAVBAR_HEIGHT - 20;
 
 export default function Weather() {
@@ -27,13 +27,13 @@ export default function Weather() {
       />
       <SafeAreaView className="flex-1 items-center">
         {/* Current Temperature */}
-        <View className="mt-16 mb-10">
+        <View className="my-20">
           <TemperatureDisplay />
         </View>
 
         {/* Weather Details */}
         <View
-          className="absolute left-0 right-0 bottom-0 bg-orange-500/65 rounded-t-3xl overflow-hidden"
+          className="absolute left-0 right-0 bottom-0 bg-orange-500/80 rounded-t-3xl overflow-hidden"
           style={{ height: WEATHER_CONTAINER_HEIGHT }}
         >
           <View style={{ height: SCROLLVIEW_HEIGHT, marginTop: 20 }}>

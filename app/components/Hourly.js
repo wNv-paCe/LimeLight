@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, Image } from "react-native";
 import { Cloud } from "lucide-react-native";
+import { useTemperatureUnit } from "./TemperatureUnitContext";
 
 // OpenWeatherMap API icons
 function getWeatherIcon(iconCode) {
@@ -8,11 +9,20 @@ function getWeatherIcon(iconCode) {
 }
 
 export default function Hourly({ hourlyData }) {
+  const { tempUnit } = useTemperatureUnit(); // Get the temperature unit
+
   if (!hourlyData) {
     return <Text className="text-gray-500">Loading hourly data...</Text>;
   }
 
   const limitedData = hourlyData.slice(0, 10);
+
+  // Convert temperature to Celsius or Fahrenheit
+  const convertTemperature = (tempInCelsius) => {
+    return tempUnit === "F"
+      ? Math.round((tempInCelsius * 9) / 5 + 32) // Celsius to Fahrenheit
+      : Math.round(tempInCelsius); // Celsius
+  };
 
   const HourlyItem = ({ data }) => {
     const weatherIconUrl = getWeatherIcon(data.icon);
@@ -25,8 +35,12 @@ export default function Hourly({ hourlyData }) {
           style={{ width: 40, height: 40 }}
           className="mb-2"
         />
-        <Text className="text-white text-2xl mb-1">{data.temp}°</Text>
-        <Text className="text-white text-sm mb-2">Feels {data.feelsLike}°</Text>
+        <Text className="text-white text-2xl mb-1">
+          {convertTemperature(data.temp)}°
+        </Text>
+        <Text className="text-white text-sm mb-2">
+          Feels {convertTemperature(data.feelsLike)}°
+        </Text>
         <View className="flex-row items-center">
           <Cloud size={16} color="white" />
           <Text className="text-white text-sm ml-1">{data.precipitation}%</Text>

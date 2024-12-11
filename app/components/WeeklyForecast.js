@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, Image } from "react-native";
-import { Cloud, Sun, Snowflake } from "lucide-react-native";
+import { Cloud } from "lucide-react-native";
+import { useTemperatureUnit } from "./TemperatureUnitContext";
 
 // OpenWeatherMap API icons
 function getWeatherIcon(iconCode) {
@@ -8,6 +9,8 @@ function getWeatherIcon(iconCode) {
 }
 
 export default function WeeklyForecast({ weeklyData }) {
+  const { tempUnit } = useTemperatureUnit(); // Get the temperature unit
+
   if (!weeklyData || weeklyData.length === 0) {
     return (
       <View className="px-4">
@@ -15,6 +18,13 @@ export default function WeeklyForecast({ weeklyData }) {
       </View>
     );
   }
+
+  // Convert temperature to the selected unit
+  const convertTemperature = (tempInCelsius) => {
+    return tempUnit === "F"
+      ? Math.round((tempInCelsius * 9) / 5 + 32) // Convert to Fahrenheit
+      : Math.round(tempInCelsius); // Keep it in Celsius
+  };
 
   const ForecastCard = ({ data }) => {
     const weatherIconUrl = getWeatherIcon(data.icon);
@@ -38,8 +48,12 @@ export default function WeeklyForecast({ weeklyData }) {
           style={{ width: 40, height: 40 }}
           className="mb-2"
         />
-        <Text className="text-white text-3xl mb-1">{data.maxTemp}°</Text>
-        <Text className="text-white text-sm mb-2">Night {data.minTemp}°</Text>
+        <Text className="text-white text-2xl mb-1">
+          {convertTemperature(data.maxTemp)}°
+        </Text>
+        <Text className="text-white text-sm mb-2">
+          Night {convertTemperature(data.minTemp)}°
+        </Text>
         <View className="flex-row items-center">
           <Cloud size={16} color="white" />
           <Text className="text-white text-sm ml-1">{data.precipitation}%</Text>

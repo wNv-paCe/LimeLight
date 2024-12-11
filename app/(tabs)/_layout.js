@@ -23,7 +23,7 @@ export default function TabLayout() {
           marginBottom: 2, // 调整图标与文字的间距
         },
         tabBarActiveTintColor: "black",
-        tabBarInactiveTintColor: "#ccc",
+        tabBarInactiveTintColor: "white",
       }}
     >
       {/* Weather Tab */}
@@ -52,7 +52,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: "Settings",
+          title: "Setting",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings" color={color} size={size} />
           ),
