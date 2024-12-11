@@ -15,6 +15,7 @@ export default function TabLayout() {
           position: "absolute", // 绝对定位
           borderTopWidth: 0, // 移除顶部边框
           paddingTop: 15, // 设置顶部内边距
+          elevation: 0,
         },
         tabBarLabelStyle: {
           fontSize: 14, // 设置标签文字大小
