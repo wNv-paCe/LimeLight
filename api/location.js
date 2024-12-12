@@ -1,8 +1,13 @@
 import * as Location from "expo-location";
 import axios from "axios";
-import { OPENWEATHERMAP_API_KEY } from "@env";
+import Constants from "expo-constants";
 
-const GEO_URL = "http://api.openweathermap.org/geo/1.0/direct";
+const GEO_URL = "https://api.openweathermap.org/geo/1.0/";
+const API_KEY = Constants.expoConfig.extra.OPENWEATHERMAP_API_KEY;
+
+if (!API_KEY) {
+  console.error("OpenWeatherMap API key is not set in app.config.js");
+}
 
 /**
  * Request location permission and get current position.
@@ -10,21 +15,19 @@ const GEO_URL = "http://api.openweathermap.org/geo/1.0/direct";
  */
 export async function getCurrentLocation() {
   try {
-    // 请求位置权限
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       throw new Error("Location permission not granted");
     }
 
-    // 获取当前位置
     const location = await Location.getCurrentPositionAsync();
     return {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     };
   } catch (error) {
-    console.error("Error fetching location:", error);
-    throw error;
+    console.error("Error fetching location:", error.message);
+    throw new Error("Failed to get current location");
   }
 }
 
@@ -36,17 +39,25 @@ export async function getCurrentLocation() {
  */
 export async function getCityFromCoords(latitude, longitude) {
   try {
-    const response = await fetch(
-      `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${OPENWEATHERMAP_API_KEY}`
-    ); // 使用正确的变量名
-    const data = await response.json();
-    if (data && data.length > 0) {
-      return data[0].name; // 返回城市名
+    const response = await axios.get(`${GEO_URL}reverse`, {
+      params: {
+        lat: latitude,
+        lon: longitude,
+        limit: 1,
+        appid: API_KEY,
+      },
+    });
+
+    if (response.data && response.data.length > 0) {
+      return response.data[0].name;
     }
     throw new Error("Unable to fetch city name");
   } catch (error) {
-    console.error("Error fetching city name:", error);
-    throw error;
+    console.error(
+      "Error fetching city name:",
+      error.response?.data || error.message
+    );
+    throw new Error("Failed to get city name from coordinates");
   }
 }
 
@@ -57,11 +68,11 @@ export async function getCityFromCoords(latitude, longitude) {
  */
 export async function getCitySuggestions(query) {
   try {
-    const response = await axios.get(GEO_URL, {
+    const response = await axios.get(`${GEO_URL}direct`, {
       params: {
         q: query,
-        limit: 5, // 返回最多 5 条建议
-        appid: OPENWEATHERMAP_API_KEY,
+        limit: 5,
+        appid: API_KEY,
       },
     });
     return response.data.map((city) => ({
@@ -71,7 +82,10 @@ export async function getCitySuggestions(query) {
       lon: city.lon,
     }));
   } catch (error) {
-    console.error("Error fetching city suggestions:", error);
-    throw error;
+    console.error(
+      "Error fetching city suggestions:",
+      error.response?.data || error.message
+    );
+    throw new Error("Failed to fetch city suggestions");
   }
 }

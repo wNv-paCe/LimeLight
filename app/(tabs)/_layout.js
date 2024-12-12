@@ -11,11 +11,11 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: {
           height: 120, // 设置导航栏高度
-          backgroundColor: "rgba(128, 128, 128, 0.3)", // 半透明灰色
           position: "absolute", // 绝对定位
           borderTopWidth: 0, // 移除顶部边框
           paddingTop: 15, // 设置顶部内边距
           elevation: 0,
+          backgroundColor: "#3B82F6",
         },
         tabBarLabelStyle: {
           fontSize: 14, // 设置标签文字大小

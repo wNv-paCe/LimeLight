@@ -29,7 +29,7 @@ export default function CityItem({
         const data = await getCurrentWeather(cityName); // 获取所有数据
         // 提取所需字段
         const extractedWeather = {
-          temp: Math.round(data.main?.temp) ?? "--",
+          temp: Math.round(data.main?.temp) ?? 0,
           icon: data.weather?.[0]?.icon ?? null,
           description: data.weather?.[0]?.description ?? "N/A",
         };
@@ -93,10 +93,9 @@ export default function CityItem({
               <Text className="text-gray-800 text-3xl font-bold">
                 {error
                   ? "--"
-                  : weather?.temp
-                  ? convertTemperature(weather.temp)
-                  : "--"}{" "}
-                °
+                  : weather?.temp !== undefined && weather?.temp !== null
+                  ? `${convertTemperature(weather.temp)}°`
+                  : "--"}
               </Text>
             </View>
           </View>

@@ -54,7 +54,7 @@ export default {
       eas: {
         projectId: "6226322a-5490-4e0f-854f-0059559bb362",
       },
-      apiKey: process.env.API_KEY, // 引用环境变量
+      OPENWEATHERMAP_API_KEY: process.env.OPENWEATHERMAP_API_KEY,
     },
   },
 };

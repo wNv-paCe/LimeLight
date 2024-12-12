@@ -1,7 +1,8 @@
 import axios from "axios";
-import { OPENWEATHERMAP_API_KEY } from "@env";
+import Constants from "expo-constants";
 
 const BASE_URL = "https://api.openweathermap.org/data/2.5/";
+const API_KEY = Constants.expoConfig.extra.OPENWEATHERMAP_API_KEY;
 
 /**
  * Fetch current weather data by city name
@@ -14,7 +15,7 @@ export async function getCurrentWeather(cityName) {
       params: {
         q: cityName,
         units: "metric",
-        appid: OPENWEATHERMAP_API_KEY,
+        appid: API_KEY,
       },
     });
     return response.data;
@@ -35,7 +36,7 @@ export async function getWeatherForecast(cityName) {
       params: {
         q: cityName,
         units: "metric",
-        appid: OPENWEATHERMAP_API_KEY,
+        appid: API_KEY,
       },
     });
     return response.data;
@@ -59,7 +60,7 @@ export async function getAirQuality(latitude, longitude) {
         params: {
           lat: latitude,
           lon: longitude,
-          appid: OPENWEATHERMAP_API_KEY,
+          appid: API_KEY,
         },
       }
     );
@@ -84,7 +85,7 @@ export async function getUVIndex(latitude, longitude) {
         params: {
           lat: latitude,
           lon: longitude,
-          appid: OPENWEATHERMAP_API_KEY,
+          appid: API_KEY,
         },
       }
     );
@@ -106,7 +107,7 @@ export async function getHourlyWeather(cityName) {
       params: {
         q: cityName,
         units: "metric",
-        appid: OPENWEATHERMAP_API_KEY,
+        appid: API_KEY,
       },
     });
 
@@ -140,7 +141,7 @@ export async function getWeeklyWeather(cityName) {
       params: {
         q: cityName,
         units: "metric",
-        appid: OPENWEATHERMAP_API_KEY,
+        appid: API_KEY,
       },
     });
 

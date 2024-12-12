@@ -3,6 +3,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { TemperatureUnitProvider } from "./components/TemperatureUnitContext";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -37,10 +38,12 @@ export default function RootLayout() {
   }
 
   return (
-    <TemperatureUnitProvider>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-      </Stack>
-    </TemperatureUnitProvider>
+    <SafeAreaProvider>
+      <TemperatureUnitProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+        </Stack>
+      </TemperatureUnitProvider>
+    </SafeAreaProvider>
   );
 }

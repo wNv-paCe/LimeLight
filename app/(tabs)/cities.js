@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Modal, Text, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Modal,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StatusBar,
+} from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import CityListContainer from "../components/CityListContainer";
 import TemperatureDisplay from "../components/CurrentTemperature";
@@ -16,6 +23,13 @@ export default function Cities() {
 
   return (
     <SafeAreaProvider>
+      <StatusBar
+        backgroundColor={
+          modalVisible ? "transparent" : "rgba(59, 130, 246, 0.8)"
+        }
+        barStyle="light-content"
+        translucent={true}
+      />
       <SafeAreaView className="flex-1 bg-blue-500/80">
         <View className="flex-1 mt-8">
           {/* 城市列表 */}
@@ -29,10 +43,13 @@ export default function Cities() {
           visible={modalVisible}
           onRequestClose={() => setModalVisible(false)} // 返回关闭模态框
         >
-          <View className="flex-1 bg-blue-500">
+          <View
+            className="flex-1 bg-blue-500"
+            style={{ marginTop: -StatusBar.currentHeight }}
+          >
             <SafeAreaView className="flex-1 items-center">
               {/* 当前温度显示 */}
-              <View className="my-20">
+              <View className="mt-28">
                 <TemperatureDisplay cityName={selectedCity} />
               </View>
 
