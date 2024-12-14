@@ -40,7 +40,7 @@ export default {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff",
       },
-      permissions: ["ACCESS_FINE_LOCATION"],
+      permissions: ["ACCESS_FINE_LOCATION", "INTERNET"],
       package: "com.charlie.observatory", // Android 包名
     },
     web: {
