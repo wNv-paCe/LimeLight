@@ -1,8 +1,7 @@
 import axios from "axios";
-import Constants from "expo-constants";
 
 const BASE_URL = "https://api.openweathermap.org/data/2.5/";
-const API_KEY = Constants.expoConfig.extra.OPENWEATHERMAP_API_KEY;
+const API_KEY = process.env.EXPO_PUBLIC_WEATHER_API_KEY;
 
 /**
  * Fetch current weather data by city name

@@ -1,9 +1,8 @@
 import * as Location from "expo-location";
 import axios from "axios";
-import Constants from "expo-constants";
 
 const GEO_URL = "https://api.openweathermap.org/geo/1.0/";
-const API_KEY = Constants.expoConfig.extra.OPENWEATHERMAP_API_KEY;
+const API_KEY = process.env.EXPO_PUBLIC_WEATHER_API_KEY;
 
 if (!API_KEY) {
   console.error("OpenWeatherMap API key is not set in app.config.js");
